@@ -31,4 +31,27 @@ run_dpdk_pool()
 
 }
 
+compile_all()
+{
+        echo "------------------------\n"
+        echo "\tcompiling begain\n"
+        echo "------------------------\n"
 
+        compile_dpdk
+
+        compile_dpdk_pool
+}
+
+run_test()
+{
+        echo "------------------------\n"
+        echo "\trun test case\n"
+        echo "------------------------\n"
+
+        run_dpdk_pool 
+
+	return $?
+}
+
+compile_all
+run_test

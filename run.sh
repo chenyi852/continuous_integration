@@ -15,31 +15,6 @@ chk_ci_dir()
 	fi
 }
 
-compile()
-{
-	echo "------------------------\n"
-	echo "\tcompiling begain\n"
-	echo "------------------------\n"
-	
-	compile_dpdk
-
-	compile_dpdk_pool
-}
-
-run_test()
-{
-	time=`date +%Y%m%d`
-	log_file=test_case_$time.log
-	echo "------------------------\n"
-	echo "\trun test case\n"
-	echo "------------------------\n"
-
-	run_dpdk_pool > $log_file 2>&1
-	if [ $? != 0 ]; then
-		tail -n 10 $log_file 
-	fi
-
-}
 
 
 chk_ci_dir
@@ -56,9 +31,9 @@ case $1 in
 	
 	;;
     run)
-	compile
-	run_test
-	
+	time=`date +%Y%m%d`
+	log_file=~/ci/compile_test_$time.log
+	./compile_dpdk.sh > $log_file 2>&1	
 	;;
     add)
 	cd $backup; 
