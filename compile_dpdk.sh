@@ -1,5 +1,6 @@
 #!/bin/bash
-
+source common.sh
+source run.rc
 RTE_SDK=$dpdk_dir
 
 dpdk_pool_dir=$dpdk_dir/examples/mempool_coloring
@@ -33,22 +34,27 @@ run_dpdk_pool()
 
 compile_all()
 {
-        echo "------------------------\n"
-        echo "\tcompiling begain\n"
-        echo "------------------------\n"
+        echo "------------------------"
+        echo "compiling"
+        echo "------------------------"
 
-        compile_dpdk
+	local compile_dpdk_log=`get_log_name "compile_dpdk"`
+	
+	local compile_dpdk_test_log=`get_log_name "compile_dpdk_test"`
+        
+	compile_dpdk > $ci_dir/$compile_dpdk_log 2>&1
 
-        compile_dpdk_pool
+        compile_dpdk_pool > $ci_dir/$compile_dpdk_test_log 2>&1
 }
 
 run_test()
 {
-        echo "------------------------\n"
-        echo "\trun test case\n"
-        echo "------------------------\n"
-
-        run_dpdk_pool 
+        echo "------------------------"
+        echo "run test case"
+        echo "------------------------"
+	local log_name=`get_log_name "test_dpdk_pool"`
+	
+        run_dpdk_pool > $ci_dir/$log_name 2>&1
 
 	return $?
 }

@@ -1,11 +1,10 @@
 #!/bin/bash
 exename=$(basename $0)
-repo_dir=~/workspace/selfsrc/continuous_integration
-backup=$prj_dir/
-ci_dir=~/ci
-export dpdk_dir=$ci_dir/dpdk
 
-source compile_dpdk.sh
+
+source run.rc
+source common.sh
+#source compile_dpdk.sh
 
 ##check if the ci dir is exit.
 chk_ci_dir()
@@ -21,25 +20,26 @@ chk_ci_dir
 
 echo $exename
 case $1 in
-    copy)
+	copy)
         ;;
-    clone)
+	clone)
 	cd $ci_dir
 	git clone git@git.virtualopensystems.com:libos-uvm/dpdk.git 
 	cd dpdk
 	git checkout origin/slicing_dev -b slicing_dev
-	
 	;;
-    run)
-	time=`date +%Y%m%d`
-	log_file=~/ci/compile_test_$time.log
-	./compile_dpdk.sh > $log_file 2>&1	
+	run)
+	log_file=$ci_dir/`get_log_name "compile_test"`
+	./compile_dpdk.sh > $log_file 2>&1 
 	;;
-    add)
+	clean)
+	rm $ci_dir/*.log
+	;; 
+	add)
 	cd $backup; 
 	git add -u .; git commit -m "`date`"
         ;;
  
-    *)
+	*)
         ;;
 esac
