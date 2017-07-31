@@ -28,9 +28,19 @@ case $1 in
 	cd dpdk
 	git checkout origin/slicing_dev -b slicing_dev
 	;;
+	update)
+	cd $ci_dir/dpdk
+	git pull
+	;;
 	run)
 	log_file=$ci_dir/`get_log_name "compile_test"`
-	./compile_dpdk.sh > $log_file 2>&1 
+	./compile_dpdk.sh > $log_file 2>&1
+	if [ $? == 0 ]; then
+		echo "CI success!"
+	else
+		echo "CI fail!"
+	fi
+ 
 	;;
 	clean)
 	rm $ci_dir/*.log
