@@ -20,5 +20,3 @@ function run_l2_fwd()
 
 }
 
-compile_l2_fwd
-run_l2_fwd
