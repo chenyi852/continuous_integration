@@ -4,6 +4,7 @@ source run.rc
 RTE_SDK=$dpdk_dir
 
 dpdk_pool_dir=$dpdk_dir/examples/mempool_coloring
+l2fwd_dir=l2fwd
 
 #$1 - dpdk_dir
 compile_dpdk()
@@ -25,10 +26,18 @@ compile_dpdk_pool()
 -Wno-error=unused-but-set-variable -Wno-error=sign-compare"
 }
 
+
+compile_l2_fwd()
+{
+	cd $l2fwd_dir 
+	RTE_SDK=$dpdk_dir make EXTRA_CFLAGS="-std=gnu99 \
+-Wno-error=unused-but-set-variable -Wno-error=sign-compare"
+}
+
 run_dpdk_pool()
 {
 	cd $dpdk_pool_dir
-	./build/mempool_coloring -l 12-13 ||(echo "test fail!\n"; return 1)
+	sudo ./build/mempool_coloring -l 0-3 ||(echo "test fail!\n"; return 1)
 
 }
 
@@ -59,5 +68,5 @@ run_test()
 	return $?
 }
 
+
 compile_all
-run_test

@@ -16,7 +16,13 @@ chk_ci_dir()
 
 
 
+compile_log_file=$ci_dir/`get_log_name "ci_compile"`
+test_log_file=$ci_dir/`get_log_name "ci_test"`
+
+
 chk_ci_dir
+
+
 
 echo $exename
 case $1 in
@@ -32,16 +38,37 @@ case $1 in
 	cd $ci_dir/dpdk
 	git pull
 	;;
-	run)
-	log_file=$ci_dir/`get_log_name "compile_test"`
-	./compile_dpdk.sh > $log_file 2>&1
+	compile)
+	./compile_dpdk.sh >> $compile_log_file 2>&1
 	if [ $? == 0 ]; then
-		echo "CI success!"
+		echo "CI compile success!"
 	else
-		echo "CI fail!"
+		echo "CI compile fail!"
 	fi
- 
 	;;
+	test)
+	./test_dpdk.sh >> $test_log_file 2>&1
+	if [ $? == 0 ]; then
+		echo "CI test success!"
+	else
+		echo "CI test fail!"
+	fi
+	;;
+	run)
+	./compile_dpdk.sh >> $compile_log_file 2>&1
+	if [ $? == 0 ]; then
+		echo "CI compile success!"
+	else
+		echo "CI compile fail!"
+	fi
+	
+	./test_dpdk.sh >> $test_log_file 2>&1
+	if [ $? == 0 ]; then
+		echo "CI test success!"
+	else
+		echo "CI test fail!"
+	fi
+	;;	
 	clean)
 	rm $ci_dir/*.log
 	;; 
