@@ -2,10 +2,10 @@
 
 export repo_dir=~/workspace/selfsrc/continuous_integration
 export backup=$prj_dir/
+export log_dir=$repo_dir/log
 
 #####CI project
 export dpdk_test_case_dir=$repo_dir
-
 
 #export ci_dir=/home/chenyi/ci
 export ci_dir=/home/chenyi/vosys
