@@ -3,6 +3,12 @@
 DEBUGFS_DIR=/sys/kernel/debug
 FTRACE_DIR=$DEBUGFS_DIR/tracing/
 SCHED_EVENT_DIR=$FTRACE_DIR/events/sched
+## log path
+LOG_PATH=/tmp/
+## per cpu buffer size
+BUF_SIZE=96000
+
+source common.sh
 
 function debugfs_mount()
 {
@@ -32,6 +38,11 @@ function ftrace_trace_clr()
 	echo 0 > $FTRACE_DIR/trace
 }
 
+function ftrace_dump()
+{
+	cat $FTRACE_DIR/trace > $1
+}
+
 function ftrace_show()
 {
 	cat $FTRACE_DIR/trace
@@ -57,6 +68,8 @@ function ftrace_sched_disable()
 	echo 0 > $SCHED_EVENT_DIR/sched_wakeup_new/enable
 }
 
+
+
 function ftrace_init()
 {
 	debugfs_mount
@@ -67,7 +80,7 @@ function ftrace_init()
 
 	ftrace_trace_clr
 
-	ftrace_set_buf_size 128
+	ftrace_set_buf_size $BUF_SIZE
 
 	ftrace_sched_enable
 
@@ -81,12 +94,17 @@ function ftrace_exit()
 	ftrace_sched_disable
 }
 
-# ./ftrace.sh -i ftrace_init
-# ./ftrace.sh -e ftrace_exit
-# ./ftrace.sh -s ftrace_show
-while getopts "ies" arg
+# ftrace_init ./ftrace.sh -i
+# ftrace_exit ./ftrace.sh -e
+# ftrace_show ./ftrace.sh -s
+# frrace_dump ./ftrace.sh -d output_path
+while getopts "deis" arg
 do
 	case $arg in
+		## dump tracing data
+		d)
+			ftrace_dump $LOG_PATH/`get_log_name "ftrace"`
+		;;
 		i)
 			ftrace_init
 		;;
