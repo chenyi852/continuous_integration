@@ -2,9 +2,13 @@
 
 TARGET_SH=test.sh
 
-cat >>$TARGET_SH <<EOF
-#!/bin/bash
+auto_gen(){
+	cat >$TARGET_SH <<EOF
+	#!/bin/bash
 
-ls
+	ls
 EOF
 chmod +x $TARGET_SH 
+}
+
+auto_gen
