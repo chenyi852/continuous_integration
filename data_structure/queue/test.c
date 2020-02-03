@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "stack.h"
+#include "queue.h"
 
 void stack_test(void)
 {
@@ -25,8 +26,47 @@ void stack_test(void)
 	
 }
 
+void queue_test(void)
+{
+	int i;
+	int err;
+	data_t data;
+	queue_s *q = (queue_s *)malloc(sizeof(queue_s));
+	
+	if (q == NULL) 
+		return;
+	queue_init(q, 10);
+	
+	for (i = 0; i < 8; i++) {
+			queue_enqueue(q, i);
+	}
+	
+	while (1) {
+		err = queue_dequeue(q, &data);
+		if (err != 0) {
+			break;
+		}
+		printf("data is %u\n", data);
+	}
+	
+	
+	for (i = 0; i < 8; i++) {
+			queue_enqueue(q, i);
+	}
+	
+	while (1) {
+		err = queue_dequeue(q, &data);
+		if (err != 0) {
+			break;
+		}
+		printf("data is %u\n", data);
+	}
+	
+}
+
 void main(void) {
 	
 	stack_test();
+	queue_test();
 
 }
