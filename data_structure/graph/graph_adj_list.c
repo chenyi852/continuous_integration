@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "data_types.h"
+#include "queue.h"
+
 typedef struct _adj_node_s {
-	int dest;
+	data_t dest;
 	struct _adj_node_s *next;
 }adj_node_s;
 
@@ -54,7 +57,7 @@ adj_node_s *new_adj_list_node(int dest)
 	return graph;
  }
  
- void add_edge(graph_s *graph, int src, int dest)
+ void add_edge(graph_s *graph, data_t src, data_t dest)
  {
 	/* add edge from dest to src */
 	adj_node_s *dest_node = new_adj_list_node(dest);
@@ -82,6 +85,44 @@ adj_node_s *new_adj_list_node(int dest)
 	}
  }
  
+ void graph_bfs(graph_s *graph, data_t v)
+ {
+	 data_t data;
+	 queue_s *q = (queue_s *)malloc(sizeof(queue_s));
+	 int err;
+	 adj_node_s *node;
+	 int i;
+	 int *visited = (int *)malloc(v * sizeof(int));
+	 
+	 if (q == NULL)
+		 return ;
+	 
+	 for (i = 0; i < graph->v; i++) {
+		 visited[i] = 0;
+	 }
+	 queue_init(q, graph->v);
+	 queue_enqueue(q, v);
+	 visited[v] = 1;
+	 printf("start from %d ", v);
+	 
+	 while (1) {
+		 err = queue_dequeue(q, &data);
+		 if (err != 0) 
+			 break;
+		 for (node = graph->adj_list[data].head; node != NULL; node = node->next) {
+			 data = node->dest;
+			 if (visited[data] != 1) {
+				 printf("->%d ", data);
+				 err = queue_enqueue(q, data);
+				 visited[data] = 1;
+			 }
+			 
+		 }
+		 
+	 }
+	
+	 
+ }
  
  // Driver program to test above functions 
 int main() 
@@ -100,5 +141,6 @@ int main()
     // print the adjacency list representation of the above graph 
     print_graph(graph); 
   
+	graph_bfs(graph, 4);
     return 0; 
 } 

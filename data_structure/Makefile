@@ -21,9 +21,7 @@ OUT = .
 
 
 default:
-	echo $(SRC)
-	$(CC) -o  $(QUEUE_OBJ) $(QUEUE_SRC) $(INCLUDE)
-	$(CC) -shared -fpic -o $(LIBTARGET) $(OBJS) 
+	$(CC) -shared -fpic -o $(LIBTARGET) $(QUEUE_SRC) $(INCLUDE)
 	$(CC) -o $(TARGET) $(GRAPH_SRC) $(CFLAGS) $(INCLUDE) $(LFLAGS)
 	
 
