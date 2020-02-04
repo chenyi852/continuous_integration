@@ -28,6 +28,8 @@ adj_node_s *new_adj_list_node(int dest)
 	
 	node->dest = dest;
 	node->next = NULL;
+	
+	return node;
 }
 
 /*
