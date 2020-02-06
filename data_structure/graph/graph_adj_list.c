@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "data_types.h"
 #include "queue.h"
@@ -120,9 +121,35 @@ adj_node_s *new_adj_list_node(int dest)
 		 }
 		 
 	 }
-	
-	 
  }
+
+static void graph_dfsutil(graph_s *graph, int v, int visited[])
+{
+	adj_node_s *node;
+	
+	visited[v] = 1;
+	printf("%d ", v);
+	
+	for (node = graph->adj_list[v].head; node != NULL; node = node->next) {
+		if (visited[node->dest] != 1) {
+			graph_dfsutil(graph, node->dest, visited);
+		}
+	}
+	
+}
+
+void graph_dfs(graph_s *graph, data_t v)
+{
+	int *visited = (int *)malloc(sizeof(int) * graph->v);
+	
+	if (visited == NULL) {
+		return;
+	}
+	
+	memset(visited, 0, sizeof(int) * graph->v);
+	
+	graph_dfsutil(graph, v, visited);
+}
  
  // Driver program to test above functions 
 int main() 
@@ -142,5 +169,9 @@ int main()
     print_graph(graph); 
   
 	graph_bfs(graph, 4);
+	
+	graph_dfs(graph, 2);
+	
+	printf("finished!\n");
     return 0; 
 } 
